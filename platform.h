@@ -97,4 +97,10 @@
 /* 10000000 ticks per-second */
 #define CLINT_TIMEBASE_FREQ 10000000
 
+
+#define KERNBASE 0x80000000
+
+// PHYSTOP -- end RAM used by the kernel
+#define PHYSTOP (KERNBASE + 128*1024*1024)
+
 #endif /* __PLATFORM_H__ */

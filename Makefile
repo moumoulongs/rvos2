@@ -19,4 +19,4 @@ SRCS_C = \
 	lock.c \
 	syscall.c
 
-include ../common.mk
+include ./common.mk

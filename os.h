@@ -13,6 +13,15 @@ extern int uart_putc(char ch);
 extern void uart_puts(char *s);
 extern int uart_getc(void);
 
+/* string.c */
+extern int memcmp(const void*, const void*, uint32_t);
+extern void *memmove(void*, const void*, uint32_t);
+extern void *memset(void*, int, uint32_t);
+extern char *safestrcpy(char*, const char*, int);
+extern int strlen(const char*);
+extern int strncmp(const char*, const char*, uint32_t);
+extern char *strncpy(char*, const char*, int);
+
 /* printf */
 extern int  printf(const char* s, ...);
 extern void panic(char *s);
