@@ -73,7 +73,7 @@ debug: all
 	@echo "Press Ctrl-C and then input 'quit' to exit GDB and QEMU"
 	@echo "-------------------------------------------------------"
 	@${QEMU} ${QFLAGS} -kernel ${ELF} -s -S &
-	@${GDB} ${ELF} -q -x ../gdbinit
+	@${GDB} ${ELF} -q -x ./gdbinit
 
 .PHONY : code
 code: all

@@ -12,6 +12,7 @@ extern void os_main(void);
 extern void trap_init(void);
 extern void plic_init(void);
 extern void timer_init(void);
+extern void proc_init(void);
 
 void start_kernel(void)
 {
@@ -27,6 +28,8 @@ void start_kernel(void)
 	timer_init();
 
 	sched_init();
+
+	proc_init();
 
 	os_main();
 

@@ -28,8 +28,11 @@ void user_task0(void)
 	}
 #endif
 
+	int t = 0;
 	while (1){
 		uart_puts("Task 0: Running... \n");
+		
+		printf("Task 0: t = %d\n", t++);
 		task_delay(DELAY);
 	}
 }
@@ -37,8 +40,11 @@ void user_task0(void)
 void user_task1(void)
 {
 	uart_puts("Task 1: Created!\n");
+	int t = 100;
 	while (1) {
 		uart_puts("Task 1: Running... \n");
+		
+		printf("Task 1: t = %d\n", t--);
 		task_delay(DELAY);
 	}
 }
@@ -48,5 +54,6 @@ void os_main(void)
 {
 	task_create(user_task0);
 	task_create(user_task1);
+	
 }
 

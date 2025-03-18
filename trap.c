@@ -46,7 +46,7 @@ reg_t trap_handler(reg_t epc, reg_t cause, struct context *cxt)
 			int id = r_mhartid();
     			*(uint32_t*)CLINT_MSIP(id) = 0;
 
-			schedule();
+			// schedule();
 
 			break;
 		case 7:
@@ -72,7 +72,7 @@ reg_t trap_handler(reg_t epc, reg_t cause, struct context *cxt)
 			break;
 		default:
 			panic("OOPS! What can I do!");
-			//return_pc += 4;
+			return_pc += 4;
 		}
 	}
 

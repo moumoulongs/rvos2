@@ -115,5 +115,5 @@ void timer_handler()
 
 	timer_load(TIMER_INTERVAL);
 
-	schedule();
+	// task_yield();
 }

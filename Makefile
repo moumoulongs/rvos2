@@ -11,7 +11,7 @@ SRCS_C = \
 	uart.c \
 	printf.c \
 	page.c \
-	sched.c \
+	proc.c \
 	user.c \
 	trap.c \
 	plic.c \

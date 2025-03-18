@@ -1,5 +1,6 @@
 #include "os.h"
 #include "syscall.h"
+#include "proc.h"
 
 int sys_gethid(unsigned int *ptr_hid)
 {
