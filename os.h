@@ -83,6 +83,9 @@ extern void plic_complete(int irq);
 extern int spin_lock(void);
 extern int spin_unlock(void);
 
+/* swtch */
+void swtch(struct context*, struct context*);
+
 /* software timer */
 struct timer {
 	void (*func)(void *arg);

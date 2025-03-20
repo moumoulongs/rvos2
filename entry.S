@@ -133,7 +133,7 @@ trap_vector:
 
 .globl swtch
 .balign 4
-switch_to:
+swtch:
 	reg_save 		a0
 	reg_restore 	a1
 	mret

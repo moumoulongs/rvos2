@@ -1,7 +1,5 @@
 #include "os.h"
 
-/* defined in entry.S */
-extern void swtch(struct context *a, struct context *b);
 
 #define MAX_TASKS 10
 #define STACK_SIZE 1024
