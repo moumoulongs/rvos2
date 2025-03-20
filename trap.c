@@ -1,4 +1,5 @@
 #include "os.h"
+#include "proc.h"
 
 extern void trap_vector(void);
 extern void uart_isr(void);
@@ -33,6 +34,10 @@ reg_t trap_handler(reg_t epc, reg_t cause, struct context *cxt)
 {
 	reg_t return_pc = epc;
 	reg_t cause_code = cause & MCAUSE_MASK_ECODE;
+
+	struct proc *p = my_proc();
+
+	
 	
 	if (cause & MCAUSE_MASK_INTERRUPT) {
 		/* Asynchronous trap - interrupt */

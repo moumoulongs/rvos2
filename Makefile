@@ -17,6 +17,6 @@ SRCS_C = \
 	plic.c \
 	timer.c \
 	lock.c \
-	syscall.c
+	syscall.c \
 
 include ./common.mk

@@ -134,9 +134,13 @@ trap_vector:
 .globl swtch
 .balign 4
 swtch:
-	reg_save 		a0
-	reg_restore 	a1
-	mret
+	reg_save	a0
+	
+	csrw 		mscratch, a1
+	LOAD		a2,	31*SIZE_REG(a1)
+	csrw		mepc, a2
+	mv			t6, a1
+	reg_restore	t6
 
-.end
+	mret
 

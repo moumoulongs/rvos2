@@ -100,6 +100,21 @@ void sched_init()
 	w_mie(r_mie() | MIE_MSIE);
 }
 
+struct cpu *my_cpu()
+{
+	struct cpu *c;
+	c = &cpu;
+	return c;
+}
+
+struct proc *my_proc()
+{
+	struct cpu *c;
+	c = my_cpu();
+	return c->proc;
+}
+
+
 /*
  * implment a simple cycle FIFO schedular
  */
@@ -107,7 +122,7 @@ void schedule()
 {
 
 	struct proc *p;
-  	struct cpu *c = &cpu;
+  	struct cpu *c = my_cpu();
 
   	c->proc = 0;
 	int t = 0;
@@ -120,10 +135,9 @@ void schedule()
       		if(p->state == RUNNABLE ) {
       			p->state = RUNNING;
       			c->proc = p;
-
 				struct context *next = &(p->context);
       			swtch(&c->context, &p->context);
-				
+				printf("pass===========================================\n");
       			c->proc = 0;
       			found = 1;
       		}
@@ -196,11 +210,12 @@ void task_exit()
 
 void sched(void)
 {
-	struct proc *p = cpu.proc;
+	struct cpu *c = my_cpu();
+	struct proc *p = my_proc();
 	if (p && p->state == RUNNING) {
 		p->state = RUNNABLE;
 	}
-	swtch(&p->context, &cpu.context);
+	swtch(&p->context, &c->context);
 }
 
 /*
@@ -210,7 +225,7 @@ void sched(void)
  */
  void task_yield()
  {
-	 struct proc *p = cpu.proc;
+	 struct proc *p = my_proc();
 	 p->state = RUNNABLE;
 	 sched();
 

@@ -67,7 +67,7 @@ _start:
 #endif
 
 	j	start_kernel		# hart 0 jump to c
-
+	
 park:
 	wfi
 	j	park

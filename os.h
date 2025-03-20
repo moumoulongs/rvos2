@@ -85,6 +85,7 @@ extern int spin_unlock(void);
 
 /* swtch */
 void swtch(struct context*, struct context*);
+void re_swtch(struct context*, struct context*);
 
 /* software timer */
 struct timer {
