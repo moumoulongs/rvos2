@@ -33,7 +33,9 @@ void user_task0(void)
 		uart_puts("Task 0: Running... \n");
 		
 		printf("Task 0: t = %d\n", t++);
+		task_exit();
 		task_delay(DELAY);
+		
 	}
 }
 

@@ -1,7 +1,7 @@
 #include "os.h"
 
 /* defined in entry.S */
-extern void switch_to(struct context *next);
+extern void swtch(struct context *a, struct context *b);
 
 #define MAX_TASKS 10
 #define STACK_SIZE 1024
@@ -115,15 +115,16 @@ void schedule()
 	int t = 0;
  	for(;;){
 
-		printf("%d\n", t++);
+		
     	int found = 0;
     	for(p = proc; p < &proc[MAX_TASKS]; p++) {
+			
       		if(p->state == RUNNABLE ) {
       			p->state = RUNNING;
       			c->proc = p;
 
 				struct context *next = &(p->context);
-      			switch_to(next);
+      			swtch(&c->context, &p->context);
 				
       			c->proc = 0;
       			found = 1;
@@ -167,7 +168,7 @@ int proc_free(struct proc *p)
 	if (p == NULL) {
 		return -1;
 	}
-	page_free((void *)p->stack);
+
 	p->state = UNUSED;
 	return 0;
 }
@@ -195,6 +196,15 @@ void task_exit()
 
 }
 
+void sched(void)
+{
+	struct proc *p = cpu.proc;
+	if (p && p->state == RUNNING) {
+		p->state = RUNNABLE;
+	}
+	swtch(&p->context, &cpu.context);
+}
+
 /*
  * DESCRIPTION
  * 	task_yield()  causes the calling task to relinquish the CPU and a new 
@@ -202,11 +212,10 @@ void task_exit()
  */
  void task_yield()
  {
-	 /* trigger a machine-level software interrupt */
-	 int id = r_mhartid();
-	 *(uint32_t*)CLINT_MSIP(id) = 1;
-	 struct cpu *c = &cpu;
-	 c->proc->state = RUNNABLE;
+	 struct proc *p = cpu.proc;
+	 p->state = RUNNABLE;
+	 sched();
+
  }
  
  /*
