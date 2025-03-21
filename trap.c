@@ -34,9 +34,6 @@ reg_t trap_handler(reg_t epc, reg_t cause, struct context *cxt)
 {
 	reg_t return_pc = epc;
 	reg_t cause_code = cause & MCAUSE_MASK_ECODE;
-
-	struct proc *p = my_proc();
-
 	
 	
 	if (cause & MCAUSE_MASK_INTERRUPT) {
@@ -49,9 +46,9 @@ reg_t trap_handler(reg_t epc, reg_t cause, struct context *cxt)
     			 * the MSIP bit in mip.
 			 */
 			int id = r_mhartid();
-    			*(uint32_t*)CLINT_MSIP(id) = 0;
+    		*(uint32_t*)CLINT_MSIP(id) = 0;
 
-			// schedule();
+			schedule();
 
 			break;
 		case 7:

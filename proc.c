@@ -92,6 +92,8 @@ struct proc proc[MAX_TASKS];
 
 int nextpid = 1;
 
+struct proc *_current_proc = proc;
+
 void sched_init()
 {
 	w_mscratch(0);
@@ -120,34 +122,22 @@ struct proc *my_proc()
  */
 void schedule()
 {
+	struct cpu *c = my_cpu();
 
-	struct proc *p;
-  	struct cpu *c = my_cpu();
-
-  	c->proc = 0;
-	int t = 0;
- 	for(;;){
-
-		
-    	int found = 0;
-    	for(p = proc; p < &proc[MAX_TASKS]; p++) {
-			
-      		if(p->state == RUNNABLE ) {
-      			p->state = RUNNING;
-      			c->proc = p;
-				struct context *next = &(p->context);
-      			swtch(&c->context, &p->context);
-				printf("pass===========================================\n");
-      			c->proc = 0;
-      			found = 1;
-      		}
-    	}
-    	if(found == 0) {
-      		// nothing to run; stop running on this core until an interrupt.
-      		asm volatile("wfi");
-    	}
-  	}
+	for(; _current_proc < &proc[MAX_TASKS]; _current_proc) {
+		struct proc *p = _current_proc;
+		_current_proc++;
+		c->proc = p;
+		if(p->state == RUNNABLE ) {
+			p->state = RUNNING;
+			struct context *next = &(p->context);
+			switch_to(&p->context);
+		}
+	}
+	_current_proc = proc;
+  	
 }
+
 
 void proc_init()
 {
@@ -208,16 +198,6 @@ void task_exit()
 
 }
 
-void sched(void)
-{
-	struct cpu *c = my_cpu();
-	struct proc *p = my_proc();
-	if (p && p->state == RUNNING) {
-		p->state = RUNNABLE;
-	}
-	swtch(&p->context, &c->context);
-}
-
 /*
  * DESCRIPTION
  * 	task_yield()  causes the calling task to relinquish the CPU and a new 
@@ -227,7 +207,8 @@ void sched(void)
  {
 	 struct proc *p = my_proc();
 	 p->state = RUNNABLE;
-	 sched();
+	 int id = r_mhartid();
+	*(uint32_t*)CLINT_MSIP(id) = 1;
 
  }
  

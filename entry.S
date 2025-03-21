@@ -131,16 +131,24 @@ trap_vector:
 	# return to whatever we were doing before trap.
 	mret
 
-.globl swtch
+# void switch_to(struct context *next);
+# a0: pointer to the context of the next task
+.globl switch_to
 .balign 4
-swtch:
-	reg_save	a0
-	
-	csrw 		mscratch, a1
-	LOAD		a2,	31*SIZE_REG(a1)
-	csrw		mepc, a2
-	mv			t6, a1
-	reg_restore	t6
+switch_to:
+	# switch mscratch to point to the context of the next task
+	csrw	mscratch, a0
+	# set mepc to the pc of the next task
+	LOAD	a1, 31*SIZE_REG(a0)
+	csrw	mepc, a1
 
+	# Restore all GP registers
+	# Use t6 to point to the context of the new task
+	mv	t6, a0
+	reg_restore t6
+
+	# Do actual context switching.
+	# Notice this will enable global interrupt
 	mret
 
+.end
